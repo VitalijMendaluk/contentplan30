@@ -372,7 +372,7 @@
 <div id="screen-loader" class="hidden">
   <div class="spinner"></div>
   <h2 class="loader-title">Будуємо твій план...</h2>
-  <p class="loader-sub">Аналізуємо твою нішу і складаємо персональний роадмап на 30 днів</p>
+  <p class="loader-sub">Gemini AI аналізує твою нішу і складає персональний роадмап на 30 днів</p>
   <div class="dots">
     <span>●</span><span>●</span><span>●</span>
   </div>
@@ -512,7 +512,7 @@ async function handleGenerate() {
 
 // =============== GEMINI API ===============
 const GEMINI_KEY = 'AIzaSyAm-a9OIPLde1awXjv4zLTAg8lQ9e0c2Vw';
-const GEMINI_MODEL = 'gemini-2.5-flash';
+const GEMINI_MODEL = 'gemini-2.5-flash-preview-05-20';
 
 async function generateRoadmap(niche) {
   const prompt = `Ти — експерт з TikTok-маркетингу. Створи детальний план на 30 днів для людини з нішею "${niche}". Поділи на 4 тижні. Кожен тиждень — 5–7 конкретних завдань. Кожне завдання — одне речення, конкретна дія. Відповідь ТІЛЬКИ у форматі JSON (без markdown, без \`\`\`json, тільки чистий JSON): { "week1": { "title": "Тиждень 1: ...", "tasks": ["..."] }, "week2": { "title": "Тиждень 2: ...", "tasks": ["..."] }, "week3": { "title": "Тиждень 3: ...", "tasks": ["..."] }, "week4": { "title": "Тиждень 4: ...", "tasks": ["..."] } }. Мова відповіді — українська.`;
