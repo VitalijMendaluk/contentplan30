@@ -510,48 +510,23 @@ async function handleGenerate() {
   }
 }
 
-// =============== GROQ API ===============
-const GROQ_KEY = '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';
-
+// =============== API (сервер обробляє ключ) ===============
 async function generateRoadmap(niche) {
-  const prompt = `Ти — експерт з TikTok-маркетингу. Створи детальний план на 30 днів для людини з нішею "${niche}". Поділи на 4 тижні. Кожен тиждень — 5–7 конкретних завдань. Кожне завдання — одне речення, конкретна дія. Відповідь ТІЛЬКИ чистий JSON без markdown: { "week1": { "title": "Тиждень 1: ...", "tasks": ["..."] }, "week2": { "title": "Тиждень 2: ...", "tasks": ["..."] }, "week3": { "title": "Тиждень 3: ...", "tasks": ["..."] }, "week4": { "title": "Тиждень 4: ...", "tasks": ["..."] } }. Мова — українська.`;
-
-  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+  const res = await fetch('/api/generate', {
     method: 'POST',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${GROQ_KEY}`
-    },
-    body: JSON.stringify({
-      model: 'llama-3.1-8b-instant',
-      messages: [
-        { role: 'system', content: 'Ти — експерт з TikTok-маркетингу. Відповідаєш ТІЛЬКИ валідним JSON без жодного тексту до або після.' },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.7,
-      max_tokens: 4096
-    })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ niche })
   });
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err?.error?.message || `Groq error ${res.status}`);
+    throw new Error(err?.error?.message || `Помилка API: ${res.status}`);
   }
 
   const data = await res.json();
-  const text = data?.choices?.[0]?.message?.content || '';
-  const cleaned = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+  if (data.error) throw new Error(data.error);
 
-  let roadmap;
-  try {
-    roadmap = JSON.parse(cleaned);
-  } catch {
-    const match = cleaned.match(/\{[\s\S]*\}/);
-    if (match) roadmap = JSON.parse(match[0]);
-    else throw new Error('Не вдалося розпарсити відповідь. Спробуй ще раз.');
-  }
-
+  const roadmap = data.roadmap;
   for (const w of ['week1','week2','week3','week4']) {
     if (!roadmap[w] || !Array.isArray(roadmap[w].tasks))
       throw new Error(`Некоректна відповідь (відсутній ${w})`);
