@@ -200,7 +200,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       </svg>
     </div>
     <p class="loader-text">AI створює твій контент-план<span class="dots"><span>.</span><span>.</span><span>.</span></span></p>
-    <p class="loader-hint">Зазвичай займає 10–20 секунд</p>
+    <p class="loader-hint">Зазвичай займає 20–40 секунд</p>
   </div>
 
   <!-- RESULTS -->
@@ -263,17 +263,19 @@ async function generate() {
   document.getElementById('results').classList.remove('show');
 
   try {
-    // Генеруємо двома частинами (по 15 днів) щоб не обрізало відповідь
-    const [part1, part2] = await Promise.all([
-      callGroq(buildPrompt(niche, audience, goal, style, 1, 15)),
-      callGroq(buildPrompt(niche, audience, goal, style, 16, 30))
-    ]);
+    // Частина 1: дні 1–15
+    const raw1 = await callGroq(buildPrompt(niche, audience, goal, style, 1, 15));
+    const days1 = extractDays(raw1);
 
-    const days1 = safeParseJSON(part1).days || [];
-    const days2 = safeParseJSON(part2).days || [];
+    // Частина 2: дні 16–30
+    const raw2 = await callGroq(buildPrompt(niche, audience, goal, style, 16, 30));
+    const days2 = extractDays(raw2);
+
     planData = [...days1, ...days2];
 
-    if (planData.length === 0) throw new Error('AI не повернув жодного дня. Спробуй ще раз.');
+    if (planData.length === 0) {
+      throw new Error('AI не повернув результат. Спробуй ще раз через 10 секунд.');
+    }
     renderResults(niche, audience);
 
   } catch (err) {
@@ -281,6 +283,31 @@ async function generate() {
     document.getElementById('genBtn').disabled = false;
     showError(err.message || 'Сталася помилка. Спробуй ще раз.');
   }
+}
+
+// Витягує масив днів з будь-якої структури JSON
+function extractDays(raw) {
+  if (!raw) return [];
+  try {
+    const json = safeParseJSON(raw);
+    // Шукаємо масив у можливих ключах
+    const arr = json.days || json.plan || json.content_plan || json.contentPlan
+              || json.content || json.items || json.videos || json.schedule;
+    if (Array.isArray(arr)) return arr;
+    // Якщо JSON сам є масивом
+    if (Array.isArray(json)) return json;
+    // Шукаємо перший масив у значеннях об'єкта
+    for (const val of Object.values(json)) {
+      if (Array.isArray(val) && val.length > 0 && val[0].day) return val;
+    }
+  } catch(e) {
+    // Якщо парсинг провалився — спробуємо витягти масив напряму
+    try {
+      const arrMatch = raw.match(/\[[\s\S]*\]/);
+      if (arrMatch) return JSON.parse(arrMatch[0]);
+    } catch(e2) {}
+  }
+  return [];
 }
 
 function buildPrompt(niche, audience, goal, style, from, to) {
@@ -320,49 +347,48 @@ JSON (тільки дні ${from}–${to}):
 }
 
 async function callGroq(userPrompt) {
-  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
-    body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'system', content: 'Ти — провідний TikTok-стратег. Відповідаєш ВИКЛЮЧНО валідним JSON без жодного тексту до або після. Ніяких пояснень.' },
-        { role: 'user', content: userPrompt }
-      ],
-      temperature: 0.78,
-      max_tokens: 8000,
-      response_format: { type: 'json_object' }
-    })
-  });
-  if (!res.ok) {
-    const e = await res.json().catch(()=>({}));
-    if (res.status === 429) {
-      // Fallback на меншу модель
-      return callGroqFallback(userPrompt);
-    }
-    throw new Error(e.error?.message || `HTTP ${res.status}`);
-  }
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || '';
-}
+  // Спробуємо основну модель, при помилці — запасну
+  const models = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'gemma2-9b-it'];
+  let lastErr = '';
 
-async function callGroqFallback(userPrompt) {
-  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
-    body: JSON.stringify({
-      model: 'llama-3.1-8b-instant',
-      messages: [
-        { role: 'system', content: 'Ти — TikTok-стратег. Відповідаєш ТІЛЬКИ валідним JSON.' },
-        { role: 'user', content: userPrompt }
-      ],
-      temperature: 0.75,
-      max_tokens: 8000,
-      response_format: { type: 'json_object' }
-    })
-  });
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || '';
+  for (const model of models) {
+    try {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${GROQ_KEY}`
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            { role: 'system', content: 'Ти — TikTok-стратег. Відповідай ТІЛЬКИ JSON без тексту до або після.' },
+            { role: 'user', content: userPrompt }
+          ],
+          temperature: 0.75,
+          max_tokens: 8000
+        })
+      });
+
+      const data = await res.json();
+
+      // Перевіряємо помилку від API
+      if (data.error) {
+        lastErr = data.error.message || 'Помилка API';
+        if (data.error.code === 'rate_limit_exceeded') continue; // пробуємо наступну модель
+        throw new Error(lastErr);
+      }
+
+      const text = data.choices?.[0]?.message?.content || '';
+      if (text) return text;
+
+    } catch(e) {
+      lastErr = e.message || 'Помилка';
+      if (e.message?.includes('rate_limit') || e.message?.includes('429')) continue;
+      throw e;
+    }
+  }
+  throw new Error('Всі моделі тимчасово зайняті. Зачекай 30 секунд і спробуй знову.');
 }
 
 function renderResults(niche, audience) {
