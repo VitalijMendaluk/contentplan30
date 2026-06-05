@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Контент-план 30 днів | TikTok</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #FE2C55;
+  --cyan: #25F4EE;
+  --black: #010101;
+  --dark: #0d0d0d;
+  --card: #111;
+  --card2: #161616;
+  --border: rgba(255,255,255,0.07);
+  --muted: rgba(255,255,255,0.4);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 0%,rgba(254,44,85,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(37,244,238,0.04) 0%,transparent 60%);pointer-events:none;z-index:0}
+
+.container{max-width:860px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+
+/* HERO */
+.hero{padding:60px 0 48px;text-align:center}
+.logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:20px}
+.logo-icon{position:relative;width:48px;height:48px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:40px;height:40px}
+.logo-c{position:absolute}.logo-r{position:absolute;left:-3px;top:2px;opacity:.7}.logo-b{position:absolute;right:-3px;top:-2px;opacity:.7}.logo-m{position:relative;z-index:2}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,9vw,78px);letter-spacing:.03em;line-height:.95;margin-bottom:12px}
+.hero h1 span.r{color:var(--red)}.hero h1 span.c{color:var(--cyan)}
+.hero p{color:var(--muted);font-size:16px;font-weight:300;max-width:440px;margin:0 auto 16px}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(37,244,238,.08);border:1px solid rgba(37,244,238,.2);border-radius:100px;padding:4px 14px;font-size:11px;color:var(--cyan);font-weight:600;letter-spacing:.07em;text-transform:uppercase}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+
+/* FORM CARD */
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;margin-bottom:24px;position:relative;overflow:hidden}
+.form-card::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(135deg,rgba(254,44,85,.2),transparent 50%,rgba(37,244,238,.15));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:destination-out;mask-composite:exclude;pointer-events:none}
+.form-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.05em;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.form-title .dot{width:8px;height:8px;border-radius:2px;background:linear-gradient(135deg,var(--red),var(--cyan))}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:520px){.form-grid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.field input,.field textarea{background:var(--dark);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s;resize:none}
+.field input:focus,.field textarea:focus{border-color:rgba(37,244,238,.4)}
+.field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,.18)}
+.field-full{grid-column:1/-1}
+
+/* BUTTON */
+.btn{width:100%;margin-top:8px;padding:16px;border:none;border-radius:12px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.1em;color:#fff;cursor:pointer;background:linear-gradient(90deg,var(--red),#ff6b6b,var(--cyan),var(--red));background-size:300% 100%;animation:gshift 4s ease infinite;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(254,44,85,.4)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;animation:none;background:#2a2a2a}
+@keyframes gshift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* ERROR */
+.error{background:rgba(254,44,85,.08);border:1px solid rgba(254,44,85,.3);border-radius:10px;padding:12px 16px;font-size:14px;color:rgba(255,255,255,.8);display:none;margin-top:12px}
+.error.show{display:flex;gap:8px;align-items:center}
+
+/* LOADER */
+.loader{display:none;text-align:center;padding:60px 0}
+.loader.show{display:block}
+.loader-ring{width:60px;height:60px;margin:0 auto 20px;position:relative}
+.loader-ring svg{width:60px;height:60px;animation:spin 1.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{color:var(--muted);font-size:14px}
+.loader-hint{color:rgba(255,255,255,.2);font-size:12px;margin-top:6px}
+.dots span{animation:blink 1.4s infinite both}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+
+/* RESULTS */
+#results{display:none}
+#results.show{display:block;animation:fadeUp .5s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* RESULTS HEADER */
+.results-header{text-align:center;padding:32px 0 24px}
+.results-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,7vw,56px);letter-spacing:.03em;line-height:1;margin-bottom:8px}
+.results-meta{color:var(--muted);font-size:14px}
+.results-meta strong{color:#fff}.results-meta em{color:var(--cyan);font-style:normal}
+
+/* STATS ROW */
+.stats{display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap}
+.stat{flex:1;min-width:100px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-align:center}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--red);line-height:1}
+.stat-label{font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
+
+/* FILTER TABS */
+.filter-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+.filter-btn{padding:7px 16px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.filter-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+.filter-btn:hover:not(.active){border-color:rgba(255,255,255,.2);color:#fff}
+
+/* DAY CARDS */
+.days-grid{display:grid;gap:14px}
+.day-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:border-color .2s}
+.day-card:hover{border-color:rgba(255,255,255,.12)}
+.day-header{display:flex;align-items:center;gap:14px;padding:18px 20px;cursor:pointer;user-select:none}
+.day-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--red);line-height:1;min-width:36px}
+.day-topic{flex:1}
+.day-topic-text{font-weight:600;font-size:15px;line-height:1.4}
+.day-week{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:.04em;text-transform:uppercase}
+.day-arrow{color:var(--muted);transition:transform .3s;font-size:18px}
+.day-card.open .day-arrow{transform:rotate(180deg)}
+.day-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
+.day-card.open .day-body{display:grid;gap:12px;padding-top:16px}
+
+.field-block{background:var(--card2);border-radius:10px;padding:14px 16px}
+.field-block-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.field-block-label::before{content:'';width:3px;height:12px;border-radius:2px;display:inline-block}
+.hook-lbl::before{background:var(--red)}
+.cta-lbl::before{background:#ff9500}
+.desc-lbl::before{background:var(--cyan)}
+.tags-lbl::before{background:#a78bfa}
+.field-block-text{font-size:14px;line-height:1.6;color:rgba(255,255,255,.85)}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.tag{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);border-radius:100px;padding:3px 10px;font-size:12px;color:#c4b5fd}
+.copy-row{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+.copy-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:var(--muted);font-size:12px;padding:4px 12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.copy-btn:hover{background:rgba(37,244,238,.1);border-color:rgba(37,244,238,.3);color:var(--cyan)}
+.copy-btn.ok{color:var(--cyan);border-color:rgba(37,244,238,.4)}
+
+/* WEEK DIVIDER */
+.week-divider{display:flex;align-items:center;gap:14px;margin:8px 0}
+.week-divider-line{flex:1;height:1px;background:var(--border)}
+.week-divider-text{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.1em;color:rgba(255,255,255,.2)}
+
+/* ACTIONS */
+.actions-row{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+.action-btn{flex:1;min-width:140px;padding:12px 20px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.action-btn:hover{border-color:rgba(255,255,255,.2);color:#fff}
+.action-btn.primary{background:linear-gradient(135deg,rgba(254,44,85,.15),rgba(37,244,238,.1));border-color:rgba(254,44,85,.3)}
+
+/* FOOTER */
+.footer{margin-top:60px;padding:28px 0;border-top:1px solid var(--border);text-align:center;color:rgba(255,255,255,.15);font-size:13px}
+.footer span{color:var(--red)}
+
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:#222;border-radius:2px}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg class="logo-r" viewBox="0 0 40 40" fill="none"><path d="M16.5 4.5h7v19.5a6 6 0 1 1-7-5.9V10.5A13 13 0 1 0 29.5 24V12.5a14.5 14.5 0 0 0 6 1.2V7a7.7 7.7 0 0 1-6-2.5" fill="#FE2C55"/></svg>
+        <svg class="logo-b" viewBox="0 0 40 40" fill="none"><path d="M16.5 4.5h7v19.5a6 6 0 1 1-7-5.9V10.5A13 13 0 1 0 29.5 24V12.5a14.5 14.5 0 0 0 6 1.2V7a7.7 7.7 0 0 1-6-2.5" fill="#25F4EE"/></svg>
+        <svg class="logo-m" viewBox="0 0 40 40" fill="none"><path d="M16.5 4.5h7v19.5a6 6 0 1 1-7-5.9V10.5A13 13 0 1 0 29.5 24V12.5a14.5 14.5 0 0 0 6 1.2V7a7.7 7.7 0 0 1-6-2.5" fill="white"/></svg>
+      </div>
+    </div>
+    <h1>КОНТЕНТ-ПЛАН<br><span class="r">30</span> <span class="c">ДНІВ</span></h1>
+    <p>Введи нішу і цільову аудиторію — AI згенерує 30 готових ідей з гачками, закликами та хештегами</p>
+    <span class="badge">Віталік, твій наставник</span>
+  </header>
+
+  <!-- FORM -->
+  <div class="form-card">
+    <div class="form-title"><div class="dot"></div>Параметри генерації</div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Твоя ніша</label>
+        <input id="f-niche" type="text" placeholder="Наприклад: фітнес, психологія, бади...">
+      </div>
+      <div class="field">
+        <label>Цільова аудиторія</label>
+        <input id="f-audience" type="text" placeholder="Наприклад: жінки 25-35, мами...">
+      </div>
+      <div class="field field-full">
+        <label>Мета акаунту (необов'язково)</label>
+        <input id="f-goal" type="text" placeholder="Наприклад: продаж курсу, набір підписників, монетизація...">
+      </div>
+      <div class="field field-full">
+        <label>Стиль контенту (необов'язково)</label>
+        <input id="f-style" type="text" placeholder="Наприклад: освітній, розважальний, особистий бренд...">
+      </div>
+    </div>
+    <div class="error" id="errorBox">⚠ <span id="errorText"></span></div>
+    <button class="btn" id="genBtn" onclick="generate()">⚡ ЗГЕНЕРУВАТИ 30 ДНІВ</button>
+  </div>
+
+  <!-- LOADER -->
+  <div class="loader" id="loader">
+    <div class="loader-ring">
+      <svg viewBox="0 0 60 60">
+        <defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FE2C55"/><stop offset="100%" stop-color="#25F4EE"/></linearGradient></defs>
+        <circle cx="30" cy="30" r="24" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5"/>
+        <circle cx="30" cy="30" r="24" fill="none" stroke="url(#lg)" stroke-width="5" stroke-linecap="round" stroke-dasharray="100 52"/>
+      </svg>
+    </div>
+    <p class="loader-text">AI створює твій контент-план<span class="dots"><span>.</span><span>.</span><span>.</span></span></p>
+    <p class="loader-hint">Зазвичай займає 10–20 секунд</p>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+    <div class="results-header">
+      <div class="results-title">ТВІЙ ПЛАН <span style="color:var(--red)">ГОТОВИЙ</span> ✓</div>
+      <p class="results-meta" id="resultsMeta"></p>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-num">30</div><div class="stat-label">Відео</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Тижні</div></div>
+      <div class="stat"><div class="stat-num">30</div><div class="stat-label">Гачків</div></div>
+      <div class="stat"><div class="stat-num">30</div><div class="stat-label">CTA</div></div>
+    </div>
+
+    <div class="filter-row" id="filterRow">
+      <button class="filter-btn active" onclick="filterDays(0,this)">Всі 30</button>
+      <button class="filter-btn" onclick="filterDays(1,this)">Тиждень 1</button>
+      <button class="filter-btn" onclick="filterDays(2,this)">Тиждень 2</button>
+      <button class="filter-btn" onclick="filterDays(3,this)">Тиждень 3</button>
+      <button class="filter-btn" onclick="filterDays(4,this)">Тиждень 4</button>
+    </div>
+
+    <div id="daysContainer"></div>
+
+    <div class="actions-row">
+      <button class="action-btn primary" onclick="copyAll()">📋 Скопіювати весь план</button>
+      <button class="action-btn" onclick="resetForm()">🔄 Новий план</button>
+    </div>
+  </div>
+
+  <footer class="footer"><p>Контент-план для TikTok · AI від <span>Віталіка, твого наставника</span></p></footer>
+</div>
+
+<script>
+const GROQ_KEY = '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';
+let planData = [];
+
+const WEEK_TITLES = ['','Тиждень 1 — Знайомство','Тиждень 2 — Довіра','Тиждень 3 — Цінність','Тиждень 4 — Продаж'];
+
+function showError(msg) {
+  document.getElementById('errorText').textContent = msg;
+  document.getElementById('errorBox').classList.add('show');
+}
+function hideError() { document.getElementById('errorBox').classList.remove('show'); }
+
+async function generate() {
+  const niche    = document.getElementById('f-niche').value.trim();
+  const audience = document.getElementById('f-audience').value.trim();
+  const goal     = document.getElementById('f-goal').value.trim();
+  const style    = document.getElementById('f-style').value.trim();
+
+  if (!niche)    { showError('Введи нішу'); return; }
+  if (!audience) { showError('Введи цільову аудиторію'); return; }
+  hideError();
+
+  document.getElementById('genBtn').disabled = true;
+  document.getElementById('loader').classList.add('show');
+  document.getElementById('results').classList.remove('show');
+
+  try {
+    // Генеруємо двома частинами (по 15 днів) щоб не обрізало відповідь
+    const [part1, part2] = await Promise.all([
+      callGroq(buildPrompt(niche, audience, goal, style, 1, 15)),
+      callGroq(buildPrompt(niche, audience, goal, style, 16, 30))
+    ]);
+
+    const days1 = safeParseJSON(part1).days || [];
+    const days2 = safeParseJSON(part2).days || [];
+    planData = [...days1, ...days2];
+
+    if (planData.length === 0) throw new Error('AI не повернув жодного дня. Спробуй ще раз.');
+    renderResults(niche, audience);
+
+  } catch (err) {
+    document.getElementById('loader').classList.remove('show');
+    document.getElementById('genBtn').disabled = false;
+    showError(err.message || 'Сталася помилка. Спробуй ще раз.');
+  }
+}
+
+function buildPrompt(niche, audience, goal, style, from, to) {
+  return `Ти — провідний TikTok-стратег. Створи контент-план для днів ${from}–${to}.
+
+Ніша: ${niche}
+Аудиторія: ${audience}
+${goal ? 'Мета: ' + goal : ''}
+${style ? 'Стиль: ' + style : ''}
+
+ПРАВИЛА:
+
+HOOK — перші 3 секунди відео. Кожен РІЗНИЙ за типом (чергуй):
+1. Провокація: "Всі роблять це неправильно..."
+2. Таємниця: "Я мовчала про це роками, але..."
+3. Шок/факт: "87% людей не знають, що..."
+4. Особиста помилка: "Я витратила [X] поки не зрозуміла..."
+5. Питання-дзеркало: "Ти теж робиш це щодня?"
+6. Обіцянка: "Після цього відео ти більше ніколи не..."
+7. Протиріччя: "Забудь все що казали про [тему]..."
+
+THESES — 3-4 конкретні тези що говорити у відео (не загальні, а конкретні дії/факти).
+
+CTA — кожен унікальний, чергуй механіки:
+- "Напиши [СЛОВО] в коментарі — надішлю гайд"
+- "Збережи відео — повернешся до нього"
+- "Підпишись — завтра продовження"
+- "Напиши в директ ХОЧУ — вишлю план"
+- "Що складніше для тебе — [варіант А] чи [варіант Б]?"
+
+DESCRIPTION — SEO: 2-3 ключові слова ніші + емодзі на початку + питання для коментарів.
+
+JSON (тільки дні ${from}–${to}):
+{"days":[{"day":${from},"topic":"...","theses":["...","...","..."],"hook":"...","cta":"...","description":"...","hashtags":["#...","#...","#...","#...","#...","#..."]}]}
+
+Мова — ТІЛЬКИ українська. Всі гачки і CTA різні.`;
+}
+
+async function callGroq(userPrompt) {
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        { role: 'system', content: 'Ти — провідний TikTok-стратег. Відповідаєш ВИКЛЮЧНО валідним JSON без жодного тексту до або після. Ніяких пояснень.' },
+        { role: 'user', content: userPrompt }
+      ],
+      temperature: 0.78,
+      max_tokens: 8000,
+      response_format: { type: 'json_object' }
+    })
+  });
+  if (!res.ok) {
+    const e = await res.json().catch(()=>({}));
+    if (res.status === 429) {
+      // Fallback на меншу модель
+      return callGroqFallback(userPrompt);
+    }
+    throw new Error(e.error?.message || `HTTP ${res.status}`);
+  }
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+async function callGroqFallback(userPrompt) {
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+    body: JSON.stringify({
+      model: 'llama-3.1-8b-instant',
+      messages: [
+        { role: 'system', content: 'Ти — TikTok-стратег. Відповідаєш ТІЛЬКИ валідним JSON.' },
+        { role: 'user', content: userPrompt }
+      ],
+      temperature: 0.75,
+      max_tokens: 8000,
+      response_format: { type: 'json_object' }
+    })
+  });
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+function renderResults(niche, audience) {
+  document.getElementById('loader').classList.remove('show');
+  document.getElementById('resultsMeta').innerHTML = `<strong>${niche}</strong> · Аудиторія: <em>${audience}</em>`;
+
+  renderDays(planData);
+  document.getElementById('results').classList.add('show');
+  document.getElementById('genBtn').disabled = false;
+  setTimeout(()=>document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+
+function renderDays(days) {
+  const container = document.getElementById('daysContainer');
+  container.innerHTML = '';
+  let lastWeek = 0;
+
+  days.forEach(d => {
+    const week = Math.ceil(d.day / 7);
+
+    if (week !== lastWeek) {
+      lastWeek = week;
+      const div = document.createElement('div');
+      div.className = 'week-divider';
+      div.dataset.week = week;
+      div.innerHTML = `<div class="week-divider-line"></div><div class="week-divider-text">${WEEK_TITLES[week]||'Тиждень '+week}</div><div class="week-divider-line"></div>`;
+      container.appendChild(div);
+    }
+
+    const card = document.createElement('div');
+    card.className = 'day-card';
+    card.dataset.week = week;
+    card.dataset.day  = d.day;
+
+    const tags = (d.hashtags||[]).map(h=>`<span class="tag">${esc(h)}</span>`).join('');
+    const thesesText = (d.theses||[]).map((t,i)=>`  ${i+1}. ${t}`).join('\n');
+    const allText = `ДЕНЬ ${d.day}: ${d.topic}\n\n🎣 ГАЧОК:\n${d.hook}\n\n🎬 ЩО ГОВОРИТИ:\n${thesesText}\n\n⚡ CTA:\n${d.cta}\n\n📝 ОПИС:\n${d.description}\n\n🏷 ХЕШТЕГИ:\n${(d.hashtags||[]).join(' ')}`;
+
+    const thesesHtml = (d.theses||[]).map((t,i)=>
+      `<div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)">
+        <span style="color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:16px;min-width:20px">${i+1}</span>
+        <span style="font-size:14px;color:rgba(255,255,255,.82)">${esc(t)}</span>
+      </div>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-num">${String(d.day).padStart(2,'0')}</div>
+        <div class="day-topic">
+          <div class="day-topic-text">${esc(d.topic||'')}</div>
+          <div class="day-week">${WEEK_TITLES[week]||''}</div>
+        </div>
+        <div class="day-arrow">⌄</div>
+      </div>
+      <div class="day-body">
+        <div class="field-block">
+          <div class="field-block-label hook-lbl" style="color:var(--red)">🎣 Гачок (перші 3 секунди)</div>
+          <div class="field-block-text" style="font-size:15px;font-weight:600">${esc(d.hook||'')}</div>
+        </div>
+        <div class="field-block">
+          <div class="field-block-label" style="color:#60a5fa">🎬 Що говорити у відео</div>
+          <div>${thesesHtml}</div>
+        </div>
+        <div class="field-block">
+          <div class="field-block-label cta-lbl" style="color:#ff9500">⚡ Заклик до дії (CTA)</div>
+          <div class="field-block-text">${esc(d.cta||'')}</div>
+        </div>
+        <div class="field-block">
+          <div class="field-block-label desc-lbl" style="color:var(--cyan)">📝 SEO-опис для TikTok</div>
+          <div class="field-block-text">${esc(d.description||'')}</div>
+        </div>
+        <div class="field-block">
+          <div class="field-block-label tags-lbl" style="color:#a78bfa">🏷 Хештеги</div>
+          <div class="tags-wrap">${tags}</div>
+        </div>
+        <div class="copy-row">
+          <button class="copy-btn" onclick="copyDay(this,'${btoa(encodeURIComponent(allText))}')">Копіювати день</button>
+        </div>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+function toggleDay(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+function filterDays(week, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+
+  document.querySelectorAll('.day-card').forEach(c=>{
+    c.style.display = (!week || c.dataset.week == week) ? '' : 'none';
+  });
+  document.querySelectorAll('.week-divider').forEach(d=>{
+    d.style.display = (!week || d.dataset.week == week) ? '' : 'none';
+  });
+}
+
+function copyDay(btn, b64) {
+  const text = decodeURIComponent(atob(b64));
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='✓ Скопійовано'; btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='Копіювати день';btn.classList.remove('ok');},2000);
+  });
+}
+
+function copyAll() {
+  const lines = planData.map(d =>
+    `ДЕНЬ ${d.day}: ${d.topic}\nГачок: ${d.hook}\nCTA: ${d.cta}\nОпис: ${d.description}\nХештеги: ${(d.hashtags||[]).join(' ')}`
+  ).join('\n\n---\n\n');
+  navigator.clipboard.writeText(lines).then(()=>alert('✓ Весь план скопійовано!'));
+}
+
+function resetForm() {
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('f-niche').value = '';
+  document.getElementById('f-audience').value = '';
+  document.getElementById('f-goal').value = '';
+  document.getElementById('f-style').value = '';
+  planData = [];
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function safeParseJSON(raw) {
+  const match = raw.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error('Некоректна відповідь. Спробуй ще раз.');
+  let str = match[0];
+  // Крок 1: видалити невалідні керуючі символи
+  str = str.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ' ');
+  // Крок 2: спробувати парсити
+  try { return JSON.parse(str); } catch(e) {}
+  // Крок 3: замінити literal newlines всередині рядків на \n
+  str = str.replace(/"((?:[^"\\]|\\.)*)"/gs, (m, inner) => {
+    return '"' + inner.replace(/\n/g,'\\n').replace(/\r/g,'') + '"';
+  });
+  try { return JSON.parse(str); } catch(e) {}
+  // Крок 4: агресивне очищення
+  str = str.replace(/\n/g,' ').replace(/\r/g,'').replace(/\t/g,' ');
+  return JSON.parse(str);
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
