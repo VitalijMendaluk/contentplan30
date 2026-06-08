@@ -237,7 +237,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </div>
 
 <script>
-const GROQ_KEY = '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';
+// API key is stored securely on the server (Vercel env vars)
 let planData = [];
 
 const WEEK_TITLES = ['','Тиждень 1 — Знайомство','Тиждень 2 — Довіра','Тиждень 3 — Цінність','Тиждень 4 — Продаж'];
@@ -353,12 +353,9 @@ async function callGroq(userPrompt) {
 
   for (const model of models) {
     try {
-      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      const res = await fetch('/api/generate', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${GROQ_KEY}`
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model,
           messages: [
