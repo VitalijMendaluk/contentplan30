@@ -348,7 +348,7 @@ JSON (тільки дні ${from}–${to}):
 
 async function callGroq(userPrompt) {
   // Спробуємо основну модель, при помилці — запасну
-  const models = ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'qwen/qwen3.6-27b'];
+  const models = ['groq/compound', 'groq/compound-mini', 'openai/gpt-oss-20b'];
   let lastErr = '';
 
   for (const model of models) {

@@ -17,7 +17,13 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`
       },
-      body: JSON.stringify({ model, messages, temperature, max_tokens })
+      body: JSON.stringify({
+        model,
+        messages,
+        temperature,
+        max_tokens,
+        max_completion_tokens: max_tokens
+      })
     });
 
     const data = await response.json();
