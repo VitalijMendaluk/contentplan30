@@ -1,5 +1,3 @@
-export const config = { api: { bodyParser: { sizeLimit: '10mb' } } };
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -19,13 +17,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`
       },
-      body: JSON.stringify({
-        model,
-        messages,
-        temperature,
-        max_tokens,
-        max_completion_tokens: max_tokens
-      })
+      body: JSON.stringify({ model, messages, temperature, max_completion_tokens: max_tokens })
     });
 
     const data = await response.json();
