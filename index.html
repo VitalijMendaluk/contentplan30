@@ -335,7 +335,7 @@ function buildPrompt(niche, audience, goal, style, from, to) {
 }
 
 async function callGroq(userPrompt) {
-  const models = ['openai/gpt-oss-20b', 'openai/gpt-oss-120b', 'qwen/qwen3.6-27b'];
+  const models = ['gpt-4o-mini'];
   let lastErr = '';
 
   for (const model of models) {
